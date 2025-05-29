@@ -14,6 +14,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.15"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <Protobuf Include="Protos\reporting_date.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>
