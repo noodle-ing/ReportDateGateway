@@ -20,15 +20,12 @@ public class ReportDateController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] ReportDateHttpRequest request)
     {
-        if (request.DayOfMonth < 1 || request.DayOfMonth > 31)
-            return BadRequest("dayOfMonth must be between 1 and 31");
-
         try
         {
             var resultDate = await _reportDateService.GetNextReportingDate(request);
             return Ok(new { resultDate });
         }
-        catch (RpcException rpcEx)
+        catch (RpcException rpcEx)  
         {
             return rpcEx.StatusCode switch
             {
