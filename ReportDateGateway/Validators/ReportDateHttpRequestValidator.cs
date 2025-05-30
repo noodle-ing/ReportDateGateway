@@ -15,7 +15,7 @@ public class ReportDateHttpRequestValidator : AbstractValidator<ReportDateHttpRe
             .Cascade(CascadeMode.Stop)
             .Must(BeValidIsoDate)
             .When(x => !string.IsNullOrWhiteSpace(x.Date))
-            .WithMessage("date must be valid ISO 8601: yyyy-MM-dd");
+            .WithMessage("date must be valid ISO 8601: yyyy-MM-dd and valid calendar date");
     }
 
     private static bool BeValidIsoDate(string? date) =>
