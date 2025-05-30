@@ -1,4 +1,7 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using ReportDateGateway.Services.DateService;
+using ReportDateGateway.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,8 @@ builder.Services.AddScoped<IReportDateService, ReportDateGateway.Services.DateSe
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssemblyContaining<ReportDateHttpRequestValidator>();
 
 var app = builder.Build();
 
