@@ -4,16 +4,28 @@ option csharp_namespace = "ReportDateService";
 
 package reporting_date;
 
+// The ReportingDate service provides operations related to calculating reporting dates.
 service ReportingDate {
+  // Returns the next reporting date based on the specified request parameters.
   rpc GetNextReportingDate (ReportingDateRequest) returns (ReportingDateResponse);
 }
 
+// The request message for the GetNextReportingDate method.
 message ReportingDateRequest {
+  // The day of the month the report is expected (e.g., 15 for the 15th day).
   int32 day_of_month = 1;
-  string date = 2; 
+
+  // The base date from which to calculate the next reporting date, in yyyy-MM-dd format.
+  // If not provided, the current date will be used.
+  string date = 2;
+
+  // Whether to adjust the reporting date if the specified day does not exist in the target month.
+  // If true, the last valid day of the month will be used.
   bool adjust = 3;
 }
 
+// The response message containing the next calculated reporting date.
 message ReportingDateResponse {
-  string next_date = 1; 
+  // The next reporting date in yyyy-MM-dd format.
+  string next_date = 1;
 }
