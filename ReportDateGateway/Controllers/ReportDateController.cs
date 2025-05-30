@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Mvc;
 using ReportDateGateway.Models;
 using ReportDateGateway.Services.DateService;
 
@@ -27,9 +28,19 @@ public class ReportDateController : ControllerBase
             var resultDate = await _reportDateService.GetNextReportingDate(request);
             return Ok(new { resultDate });
         }
+        catch (RpcException rpcEx)
+        {
+            return rpcEx.StatusCode switch
+            {
+                Grpc.Core.StatusCode.InvalidArgument => BadRequest(rpcEx.Status.Detail),
+                Grpc.Core.StatusCode.NotFound => NotFound(rpcEx.Status.Detail),
+                Grpc.Core.StatusCode.Unavailable => StatusCode(503, "gRPC service unavailable"),
+                _ => StatusCode(500, $"gRPC error: {rpcEx.Status.Detail}")
+            };
+        }
         catch (Exception ex)
         {
-            return StatusCode(500, $"gRPC call failed: {ex.Message}");
+            return StatusCode(500, $"Internal error: {ex.Message}");
         }
     }
 }
