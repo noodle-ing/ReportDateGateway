@@ -27,17 +27,19 @@ public class ReportDateController : ControllerBase
         }
         catch (RpcException rpcEx)  
         {
-            return rpcEx.StatusCode switch
-            {
-                Grpc.Core.StatusCode.InvalidArgument => BadRequest(rpcEx.Status.Detail),
-                Grpc.Core.StatusCode.NotFound => NotFound(rpcEx.Status.Detail),
-                Grpc.Core.StatusCode.Unavailable => StatusCode(503, "gRPC service unavailable"),
-                _ => StatusCode(500, $"gRPC error: {rpcEx.Status.Detail}")
-            };
+            return HandleRpcException(rpcEx);
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal error: {ex.Message}");
         }
     }
+    private IActionResult HandleRpcException(RpcException ex) =>
+        ex.StatusCode switch
+        {
+            Grpc.Core.StatusCode.InvalidArgument => BadRequest(ex.Status.Detail),
+            Grpc.Core.StatusCode.NotFound => NotFound(ex.Status.Detail),
+            Grpc.Core.StatusCode.Unavailable => StatusCode(503, "gRPC service unavailable"),
+            _ => StatusCode(500, $"gRPC error: {ex.Status.Detail}")
+        };
 }
